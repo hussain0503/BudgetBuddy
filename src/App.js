@@ -17,6 +17,8 @@ const App = () => {
 
   // List of routes where Navbar should not appear
   const hideNavbarRoutes = ["/login", "/", "/privacypolicy", "/termsofservice"];
+  // List of routes where Footer should not appear
+  const hideFooterRoutes = ["/login", "/"];
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
@@ -35,7 +37,9 @@ const App = () => {
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
         </Routes>
       </Box>
-      <Footer />
+
+      {/* Conditionally render Footer */}
+      {!hideFooterRoutes.includes(location.pathname.toLowerCase()) && <Footer />}
     </Box>
   );
 };

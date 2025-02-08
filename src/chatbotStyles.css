@@ -1,0 +1,34 @@
+/* Ensure the chatbot container spans the full width */
+.react-chatbot-kit-chat-container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Shift bot messages to the left */
+  .react-chatbot-kit-chat-bot-message {
+    display: flex !important;
+    flex-direction: row !important; /* Icon on left, message on right */
+    align-items: center !important;
+    justify-content: flex-start !important; /* Moves message to the left */
+    width: fit-content !important;
+    max-width: 60% !important;
+    margin-left: 20px !important; /* Adjusts spacing from left edge */
+  }
+  
+  /* Shift text inside bot messages to the left */
+  .react-chatbot-kit-chat-bot-message div {
+    text-align: left !important;
+  }
+  
+  /* Keep user messages on the right */
+  .react-chatbot-kit-chat-user-message {
+    display: flex !important;
+    flex-direction: row-reverse !important; /* Icon on right, message on left */
+    align-items: center !important;
+    justify-content: flex-end !important;
+    text-align: right !important;
+    width: fit-content !important;
+    max-width: 60% !important;
+    margin-right: 20px !important; /* Adjusts spacing from right edge */
+  }
+  

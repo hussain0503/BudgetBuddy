@@ -10,9 +10,9 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import SavingsIcon from "@mui/icons-material/Savings";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import InfoIcon from "@mui/icons-material/Info"; // Changed to InfoIcon
-import LogoutIcon from "@mui/icons-material/Logout"; // Added LogoutIcon
+import ChatIcon from "@mui/icons-material/Chat"; // Updated icon
+import InfoIcon from "@mui/icons-material/Info"; 
+import LogoutIcon from "@mui/icons-material/Logout"; 
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -29,9 +29,9 @@ const Navbar = () => {
   const navLinks = [
     { label: "Home", path: "/Home", icon: <HomeIcon /> },
     { label: "Expenses", path: "/Expenses", icon: <SavingsIcon /> },
-    { label: "Reports", path: "/reports", icon: <BarChartIcon /> },
+    { label: "Chatbot", path: "/reports", icon: <ChatIcon /> }, 
     { label: "About Us", path: "/aboutus", icon: <InfoIcon /> },
-    { label: "Logout", path: "/", icon: <LogoutIcon /> }, // Updated for Logout
+    { label: "Logout", path: "/", icon: <LogoutIcon /> }, 
   ];
 
   return (
@@ -43,21 +43,22 @@ const Navbar = () => {
       }}
     >
       <Toolbar>
-        {/* Branding */}
+        {/* Branding - Improved Typography */}
         <Typography
-          variant="h5"
+          variant="h4"
           component={Link}
-          to="/"
+          to="/home"
           sx={{
             flexGrow: 1,
             textDecoration: "none",
             color: "white",
             fontWeight: "bold",
-            fontFamily: "'Poppins', sans-serif",
-            "&:hover": { color: "#ffcc00" },
+            fontFamily: "'Pacifico', cursive", // More stylish font
+            letterSpacing: "1px",
+            "&:hover": { color: "#ffcc00", transform: "scale(1.05)", transition: "0.3s" },
           }}
         >
-          BudgetBuddy
+          Budget<span style={{ color: "#ffcc00" }}>Buddy</span> {/* Color contrast */}
         </Typography>
 
         {/* Desktop Navigation */}

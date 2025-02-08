@@ -20,7 +20,7 @@ function TermsOfService() {
           sx={{
             fontWeight: "bold",
             mb: 2,
-            color: "#1976d2", // Blue color for the header
+            color: "#1976d2", 
           }}
         >
           Terms of Service
