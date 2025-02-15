@@ -77,7 +77,7 @@ function TermsOfService() {
           7. Contact Us
         </Typography>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          If you have any questions regarding these Terms of Service, please contact us at hussainzmantri@gmail.com.
+          If you have any questions regarding these Terms of Service, please contact us at support@BudgetBuddy.com.
         </Typography>
       </Box>
     </Container>

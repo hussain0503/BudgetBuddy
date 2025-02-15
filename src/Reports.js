@@ -19,7 +19,7 @@ const Reports = () => {
         boxSizing: "border-box",
       }}
     >
-      <div style={{ width: "100%", minWidth: "500px" }}> {/* Half-page width */}
+      <div style={{ width: "100%", minWidth: "500px" }}> 
         <Chatbot config={config} messageParser={MessageParser} actionProvider={ActionProvider} />
       </div>
     </div>

@@ -10,13 +10,16 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import SavingsIcon from "@mui/icons-material/Savings";
-import ChatIcon from "@mui/icons-material/Chat"; // Updated icon
-import InfoIcon from "@mui/icons-material/Info"; 
-import LogoutIcon from "@mui/icons-material/Logout"; 
+import ChatIcon from "@mui/icons-material/Chat";
+import InfoIcon from "@mui/icons-material/Info";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ReceiptIcon from "@mui/icons-material/Receipt"; 
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"; 
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [splitMenuAnchor, setSplitMenuAnchor] = React.useState(null);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -26,13 +29,13 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  const navLinks = [
-    { label: "Home", path: "/Home", icon: <HomeIcon /> },
-    { label: "Expenses", path: "/Expenses", icon: <SavingsIcon /> },
-    { label: "Chatbot", path: "/reports", icon: <ChatIcon /> }, 
-    { label: "About Us", path: "/aboutus", icon: <InfoIcon /> },
-    { label: "Logout", path: "/", icon: <LogoutIcon /> }, 
-  ];
+  const handleSplitMenuOpen = (event) => {
+    setSplitMenuAnchor(event.currentTarget);
+  };
+
+  const handleSplitMenuClose = () => {
+    setSplitMenuAnchor(null);
+  };
 
   return (
     <AppBar
@@ -43,7 +46,6 @@ const Navbar = () => {
       }}
     >
       <Toolbar>
-        {/* Branding - Improved Typography */}
         <Typography
           variant="h4"
           component={Link}
@@ -53,46 +55,132 @@ const Navbar = () => {
             textDecoration: "none",
             color: "white",
             fontWeight: "bold",
-            fontFamily: "'Pacifico', cursive", // More stylish font
+            fontFamily: "'Pacifico', cursive",
             letterSpacing: "1px",
             "&:hover": { color: "#ffcc00", transform: "scale(1.05)", transition: "0.3s" },
           }}
         >
-          Budget<span style={{ color: "#ffcc00" }}>Buddy</span> {/* Color contrast */}
+          Budget<span style={{ color: "#ffcc00" }}>Buddy</span>
         </Typography>
 
-        {/* Desktop Navigation */}
-        <Box
-          sx={{
-            display: { xs: "none", md: "flex" },
-            gap: 2,
-          }}
-        >
-          {navLinks.map((link) => (
-            <Button
-              key={link.label}
-              component={Link}
-              to={link.path}
-              startIcon={link.icon}
-              color="inherit"
-              sx={{
-                color: "white",
-                textTransform: "capitalize",
-                fontWeight: 500,
-                fontFamily: "'Roboto', sans-serif",
-                "&:hover": {
-                  color: "#ffcc00",
-                  transform: "scale(1.1)",
-                  transition: "all 0.3s ease-in-out",
-                },
-              }}
-            >
-              {link.label}
-            </Button>
-          ))}
+        <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
+
+          <Button
+            component={Link}
+            to="/Home"
+            startIcon={<HomeIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+              textTransform: "capitalize",
+              fontWeight: 500,
+              fontFamily: "'Roboto', sans-serif",
+              "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
+            }}
+          >
+            Home
+          </Button>
+
+          <Button
+            component={Link}
+            to="/Expenses"
+            startIcon={<SavingsIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+              textTransform: "capitalize",
+              fontWeight: 500,
+              fontFamily: "'Roboto', sans-serif",
+              "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
+            }}
+          >
+            Expenses
+          </Button>
+
+          <Button
+            color="inherit"
+            startIcon={<ReceiptIcon />} 
+            endIcon={<ArrowDropDownIcon />} 
+            onClick={handleSplitMenuOpen}
+            sx={{
+              color: "white",
+              textTransform: "capitalize",
+              fontWeight: 500,
+              fontFamily: "'Roboto', sans-serif",
+              "&:hover": {
+                color: "#ffcc00",
+                transform: "scale(1.1)",
+                transition: "all 0.3s ease-in-out",
+              },
+            }}
+          >
+            Split Expenses
+          </Button>
+          <Menu
+            anchorEl={splitMenuAnchor}
+            open={Boolean(splitMenuAnchor)}
+            onClose={handleSplitMenuClose}
+          >
+            <MenuItem component={Link} to="/manualsplit" onClick={handleSplitMenuClose}>
+              Manual Split
+            </MenuItem>
+            <MenuItem component={Link} to="/billsplit" onClick={handleSplitMenuClose}>
+              Bill Receipt Split
+            </MenuItem>
+          </Menu>
+
+
+          <Button
+            component={Link}
+            to="/reports"
+            startIcon={<ChatIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+              textTransform: "capitalize",
+              fontWeight: 500,
+              fontFamily: "'Roboto', sans-serif",
+              "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
+            }}
+          >
+            Chatbot
+          </Button>
+
+
+          <Button
+            component={Link}
+            to="/aboutus"
+            startIcon={<InfoIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+              textTransform: "capitalize",
+              fontWeight: 500,
+              fontFamily: "'Roboto', sans-serif",
+              "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
+            }}
+          >
+            About Us
+          </Button>
+
+
+          <Button
+            component={Link}
+            to="/"
+            startIcon={<LogoutIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+              textTransform: "capitalize",
+              fontWeight: 500,
+              fontFamily: "'Roboto', sans-serif",
+              "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
+            }}
+          >
+            Logout
+          </Button>
         </Box>
 
-        {/* Mobile Menu */}
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton
             size="large"
@@ -102,22 +190,25 @@ const Navbar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            {navLinks.map((link) => (
-              <MenuItem
-                key={link.label}
-                component={Link}
-                to={link.path}
-                onClick={handleMenuClose}
-              >
-                {link.icon}
-                <Typography sx={{ ml: 1 }}>{link.label}</Typography>
-              </MenuItem>
-            ))}
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+            <MenuItem component={Link} to="/Home" onClick={handleMenuClose}>
+              <HomeIcon sx={{ mr: 1 }} /> Home
+            </MenuItem>
+            <MenuItem component={Link} to="/Expenses" onClick={handleMenuClose}>
+              <SavingsIcon sx={{ mr: 1 }} /> Expenses
+            </MenuItem>
+            <MenuItem onClick={handleSplitMenuOpen}>
+              <ReceiptIcon sx={{ mr: 1 }} /> Split Expenses <ArrowDropDownIcon sx={{ ml: 1 }} />
+            </MenuItem>
+            <MenuItem component={Link} to="/reports" onClick={handleMenuClose}>
+              <ChatIcon sx={{ mr: 1 }} /> Chatbot
+            </MenuItem>
+            <MenuItem component={Link} to="/aboutus" onClick={handleMenuClose}>
+              <InfoIcon sx={{ mr: 1 }} /> About Us
+            </MenuItem>
+            <MenuItem component={Link} to="/" onClick={handleMenuClose}>
+              <LogoutIcon sx={{ mr: 1 }} /> Logout
+            </MenuItem>
           </Menu>
         </Box>
       </Toolbar>

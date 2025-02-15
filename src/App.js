@@ -11,18 +11,20 @@ import { Box } from "@mui/material";
 import PrivacyPolicy from "./PrivacyPolicy";
 import TermsofService from "./TermsofService";
 import Aboutus from "./Aboutus";
+import SplitExpenses from "./ManualSplit";
+import SplitBill from "./BillSplit";
+import ForgotPassword from "./ForgotPassword";
+
 
 const App = () => {
   const location = useLocation();
 
-  // List of routes where Navbar should not appear
-  const hideNavbarRoutes = ["/login", "/", "/privacypolicy", "/termsofservice"];
-  // List of routes where Footer should not appear
-  const hideFooterRoutes = ["/login", "/"];
+  const hideNavbarRoutes = ["/login", "/", "/privacypolicy", "/termsofservice", "/forgotpassword"];
+const hideFooterRoutes = ["/login", "/", "/forgotpassword"];
+
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      {/* Conditionally render Navbar */}
       {!hideNavbarRoutes.includes(location.pathname.toLowerCase()) && <Navbar />}
       
       <Box sx={{ flex: 1 }}>
@@ -33,12 +35,14 @@ const App = () => {
           <Route path="/TermsofService" element={<TermsofService />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/Login" element={<Login />} />
+          <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/Aboutus" element={<Aboutus />} />
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+          <Route path="/ManualSplit" element={<SplitExpenses />} />
+          <Route path="/BillSplit" element={<SplitBill />} />
         </Routes>
       </Box>
 
-      {/* Conditionally render Footer */}
       {!hideFooterRoutes.includes(location.pathname.toLowerCase()) && <Footer />}
     </Box>
   );

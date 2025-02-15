@@ -20,7 +20,7 @@ function PrivacyPolicy() {
           sx={{
             fontWeight: "bold",
             mb: 2,
-            color: "#1976d2", // Blue color for the header
+            color: "#1976d2", 
           }}
         >
           Privacy Policy
@@ -86,7 +86,7 @@ function PrivacyPolicy() {
           7. Contact Us
         </Typography>
         <Typography variant="body1" sx={{ mb: 2 }}>
-          If you have any questions regarding this Privacy Policy, please contact us at support@yourapp.com.
+          If you have any questions regarding this Privacy Policy, please contact us at support@BudgetBuddy.com.
         </Typography>
       </Box>
     </Container>

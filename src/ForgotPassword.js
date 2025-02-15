@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion"; 
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   TextField,
@@ -11,63 +12,52 @@ import {
   Link,
 } from "@mui/material";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-function Login() {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-
+function ForgotPassword() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, password } = formData;
-
-    if (!username || !password) {
+    if (!email || !password || !confirmPassword) {
       setError("All fields are required.");
       return;
     }
-
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
       return;
     }
 
     setError("");
     setLoading(true);
 
-    console.log("Sending login request:", { username, password });
-
     try {
-      const response = await axios.post("http://localhost:5001/api/auth/login", {
-        username,
+      const response = await axios.post("http://localhost:5001/api/auth/reset-password", {
+        email,
         password,
       });
-
-      console.log("Login successful", response.data);
-
-      navigate("/Home");
+      setMessage(response.data.message || "Password updated successfully!");
+      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
-      setError("Login failed. Please check your credentials.");
-      console.error("Login error:", err);
+      setError("Failed to reset password. Please try again.");
+      console.error("Reset Password Error:", err);
     }
-
     setLoading(false);
   };
 
   return (
     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
       <CssBaseline />
-      
+
 
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -87,10 +77,10 @@ function Login() {
           }}
         >
           <Typography component="h1" variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
-            Sign In
+            Reset Password
           </Typography>
-          <Typography component="p" variant="body2" sx={{ color: "text.secondary", mb: 3 }}>
-            Please enter your login credentials.
+          <Typography component="p" variant="body2" sx={{ color: "text.secondary", mb: 3, textAlign: "center" }}>
+            Enter your email and new password below.
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }} noValidate>
             <Grid container spacing={2}>
@@ -98,28 +88,31 @@ function Login() {
                 <TextField
                   required
                   fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                  placeholder="Enter your username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  InputLabelProps={{ shrink: true }}
+                  id="email"
+                  label="Email Address"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
+                  label="New Password"
                   type="password"
-                  id="password"
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  InputLabelProps={{ shrink: true }}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="Confirm Password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </Grid>
             </Grid>
@@ -128,31 +121,24 @@ function Login() {
                 {error}
               </Typography>
             )}
+            {message && (
+              <Typography color="success.main" sx={{ mt: 2, textAlign: "center" }}>
+                {message}
+              </Typography>
+            )}
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{
-                mt: 3,
-                mb: 2,
-                py: 1.5,
-                backgroundColor: "#1976d2",
-                fontWeight: "bold",
-                "&:hover": { backgroundColor: "#115293" },
-              }}
+              sx={{ mt: 3, mb: 2, py: 1.5, fontWeight: "bold" }}
               disabled={loading}
             >
-              {loading ? "Signing In..." : "Sign In"}
+              {loading ? "Updating..." : "Reset Password"}
             </Button>
-            <Grid container justifyContent="space-between">
+            <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/forgotpassword" variant="body2" sx={{ textDecoration: "none", color: "#1976d2" }}>
-                  Forgot Password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/" variant="body2" sx={{ textDecoration: "none", color: "#1976d2" }}>
-                  Don't have an account? Sign up
+                <Link href="/login" variant="body2" sx={{ textDecoration: "none", color: "#1976d2" }}>
+                  Back to Sign In
                 </Link>
               </Grid>
             </Grid>
@@ -163,4 +149,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default ForgotPassword;
