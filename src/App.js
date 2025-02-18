@@ -19,7 +19,7 @@ import ForgotPassword from "./ForgotPassword";
 const App = () => {
   const location = useLocation();
 
-  const hideNavbarRoutes = ["/login", "/", "/privacypolicy", "/termsofservice", "/forgotpassword"];
+  const hideNavbarRoutes = ["/login", "/", "/forgotpassword"];
 const hideFooterRoutes = ["/login", "/", "/forgotpassword"];
 
 

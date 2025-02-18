@@ -53,15 +53,21 @@ export default function SplitBill() {
   };
 
   const assignPersonToItem = (index) => {
-    if (people.length === 0) return;
     const updatedItems = [...lineItems];
     const currentIndex = people.indexOf(updatedItems[index].assignedTo);
-    const nextPerson = currentIndex === -1 ? people[0] : people[(currentIndex + 1) % people.length];
-
-    updatedItems[index].assignedTo = nextPerson;
+  
+    if (currentIndex === -1) {
+      updatedItems[index].assignedTo = people[0];
+    } else if (currentIndex === people.length - 1) {
+      updatedItems[index].assignedTo = ""; 
+    } else {
+      updatedItems[index].assignedTo = people[currentIndex + 1];
+    }
+  
     setLineItems(updatedItems);
     calculateOwedAmounts(updatedItems);
   };
+  
 
   const addPerson = () => {
     if (newPerson.trim() !== "" && !people.includes(newPerson)) {
