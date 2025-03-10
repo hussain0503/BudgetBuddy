@@ -33,7 +33,7 @@ const hideFooterRoutes = ["/login", "/", "/forgotpassword"];
           <Route path="/Expenses" element={<ExpenseTracker />} />
           <Route path="/" element={<Signup />} />
           <Route path="/TermsofService" element={<TermsofService />} />
-          <Route path="/reports" element={<Reports />} />
+          <Route path="/chatbot" element={<Reports />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/Aboutus" element={<Aboutus />} />

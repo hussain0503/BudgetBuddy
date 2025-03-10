@@ -132,7 +132,7 @@ const Navbar = () => {
 
           <Button
             component={Link}
-            to="/reports"
+            to="/chatbot"
             startIcon={<ChatIcon />}
             color="inherit"
             sx={{
