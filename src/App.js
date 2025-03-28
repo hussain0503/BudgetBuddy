@@ -14,6 +14,7 @@ import Aboutus from "./Aboutus";
 import SplitExpenses from "./ManualSplit";
 import SplitBill from "./BillSplit";
 import ForgotPassword from "./ForgotPassword";
+import Resetpassword from "./ResetPassword";
 
 const App = () => {
   const location = useLocation();
@@ -39,6 +40,7 @@ const hideFooterRoutes = ["/login", "/", "/forgotpassword"];
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/ManualSplit" element={<SplitExpenses />} />
           <Route path="/BillSplit" element={<SplitBill />} />
+          <Route path="/resetpassword/:token" element={<Resetpassword />} />          
         </Routes>
       </Box>
 

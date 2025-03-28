@@ -15,8 +15,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ReceiptIcon from "@mui/icons-material/Receipt"; 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"; 
-import CalculateIcon from "@mui/icons-material/Calculate";  // Added for Manual Split
-import GroupsIcon from "@mui/icons-material/Groups";        // Added for Bill Split
+import CalculateIcon from "@mui/icons-material/Calculate";  
+import GroupsIcon from "@mui/icons-material/Groups";        
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
