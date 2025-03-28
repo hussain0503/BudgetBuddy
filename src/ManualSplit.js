@@ -11,8 +11,12 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Alert,
 } from "@mui/material";
 import { motion } from "framer-motion";
+import { Delete } from "@mui/icons-material";
+
+
 
 export default function SplitExpenses() {
   const [expense, setExpense] = useState("");
@@ -21,12 +25,14 @@ export default function SplitExpenses() {
   const [splitType, setSplitType] = useState("equal");
   const [percentages, setPercentages] = useState([""]);
   const [shares, setShares] = useState([""]);
+  const [error, setError] = useState("");
 
   const addPerson = () => {
     setPeople([...people, ""]);
     setAmounts([...amounts, ""]);
     setPercentages([...percentages, ""]);
     setShares([...shares, ""]);
+    setError(""); // Clear error when adding a person
   };
 
   const updatePerson = (index, value) => {
@@ -35,22 +41,73 @@ export default function SplitExpenses() {
     setPeople(newPeople);
   };
 
+  const deletePerson = (index) => {
+    if (people.length > 1) {
+      setPeople(people.filter((_, i) => i !== index));
+      setAmounts(amounts.filter((_, i) => i !== index));
+      setPercentages(percentages.filter((_, i) => i !== index));
+      setShares(shares.filter((_, i) => i !== index));
+      setError(""); // Clear any errors when deleting
+    } else {
+      setError("At least one participant is required.");
+    }
+  };
+  
   const updateAmount = (index, value) => {
     const newAmounts = [...amounts];
-    newAmounts[index] = value;
-    setAmounts(newAmounts);
+    const parsedValue = parseFloat(value) || 0;
+  
+    // Ensure the new value does not cause the total to exceed the expense amount
+    const totalOtherAmounts = newAmounts.reduce(
+      (sum, amount, i) => (i === index ? sum : sum + parseFloat(amount || 0)),
+      0
+    );
+  
+    if (totalOtherAmounts + parsedValue > expense) {
+      setError("Total amounts cannot exceed the expense amount.");
+    } else {
+      setError("");
+      newAmounts[index] = parsedValue;
+      setAmounts(newAmounts);
+    }
   };
-
+  
   const updatePercentage = (index, value) => {
     const newPercentages = [...percentages];
     newPercentages[index] = value;
-    setPercentages(newPercentages);
+  
+    const totalPercentage = newPercentages.reduce((sum, percentage) => sum + parseFloat(percentage || 0), 0);
+    
+    if (totalPercentage > 100) {
+      setError("Total percentages cannot exceed 100%.");
+    } else {
+      setError("");
+      setPercentages(newPercentages);
+    }
   };
-
+  
   const updateShares = (index, value) => {
     const newShares = [...shares];
     newShares[index] = value;
     setShares(newShares);
+  };
+
+  const validatePercentageSplit = (newPercentages) => {
+    const totalPercentage = newPercentages.reduce((sum, percentage) => sum + parseFloat(percentage || 0), 0);
+    if (totalPercentage > 100) {
+      setError("Total percentages cannot exceed 100%.");
+    } else {
+      setError("");
+    }
+  };
+
+  const validateUnequalSplit = (newAmounts) => {
+    const totalAmount = newAmounts.reduce((sum, amount) => sum + parseFloat(amount || 0), 0);
+    if (totalAmount > expense) {
+      setError("Total amounts cannot exceed the expense amount.");
+    } else {
+      setError("");
+    }
   };
 
   const calculateSplit = () => {
@@ -94,7 +151,7 @@ export default function SplitExpenses() {
                 boxShadow: "0px 6px 14px rgba(0, 0, 0, 0.15)",
                 borderRadius: 4,
                 p: 4,
-                transition: "transform 0.3s ease, box-shadow 0.3s ease"
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
               }}
             >
               <CardContent>
@@ -110,79 +167,100 @@ export default function SplitExpenses() {
                   variant="outlined"
                   sx={{ mb: 3, backgroundColor: "#ffffff" }}
                 />
-               <FormControl fullWidth sx={{ mb: 3, mt: 1.5 }}>
-  <InputLabel id="split-type-label">Split Type</InputLabel>
-  <Select
-    labelId="split-type-label"
-    value={splitType}
-    onChange={(e) => setSplitType(e.target.value)}
-    label="Split Type"
-  >
-    <MenuItem value="equal">Equal Split</MenuItem>
-    <MenuItem value="unequal">Unequal Split</MenuItem>
-    <MenuItem value="percentage">Percentage-Based Split</MenuItem>
-    <MenuItem value="shares">Shares-Based Split</MenuItem>
-  </Select>
-</FormControl>
+                <FormControl fullWidth sx={{ mb: 3, mt: 1.5 }}>
+                  <InputLabel id="split-type-label">Split Type</InputLabel>
+                  <Select
+                    labelId="split-type-label"
+                    value={splitType}
+                    onChange={(e) => setSplitType(e.target.value)}
+                    label="Split Type"
+                  >
+                    <MenuItem value="equal">Equal Split</MenuItem>
+                    <MenuItem value="unequal">Unequal Split</MenuItem>
+                    <MenuItem value="percentage">Percentage-Based Split</MenuItem>
+                    <MenuItem value="shares">Shares-Based Split</MenuItem>
+                  </Select>
+                </FormControl>
 
+                {error && <Alert severity="error">{error}</Alert>}
 
                 <Typography variant="h6" gutterBottom fontWeight="bold">
                   Participants
                 </Typography>
                 {people.map((person, index) => (
-                  <Grid container spacing={2} key={index} sx={{ mb: 2 }}>
-                    <Grid item xs={4}>
-                      <TextField
-                        label="Name"
-                        type="text"
-                        value={person}
-                        onChange={(e) => updatePerson(index, e.target.value)}
-                        fullWidth
-                        variant="outlined"
-                        sx={{ backgroundColor: "#ffffff" }}
-                      />
-                    </Grid>
-                    {splitType === "unequal" && (
-                      <Grid item xs={4}>
-                        <TextField
-                          label="Amount Paid"
-                          type="number"
-                          value={amounts[index]}
-                          onChange={(e) => updateAmount(index, e.target.value)}
-                          fullWidth
-                          variant="outlined"
-                          sx={{ backgroundColor: "#ffffff" }}
-                        />
-                      </Grid>
-                    )}
-                    {splitType === "percentage" && (
-                      <Grid item xs={4}>
-                        <TextField
-                          label="Percentage (%)"
-                          type="number"
-                          value={percentages[index]}
-                          onChange={(e) => updatePercentage(index, e.target.value)}
-                          fullWidth
-                          variant="outlined"
-                          sx={{ backgroundColor: "#ffffff" }}
-                        />
-                      </Grid>
-                    )}
-                    {splitType === "shares" && (
-                      <Grid item xs={4}>
-                        <TextField
-                          label="Shares"
-                          type="number"
-                          value={shares[index]}
-                          onChange={(e) => updateShares(index, e.target.value)}
-                          fullWidth
-                          variant="outlined"
-                          sx={{ backgroundColor: "#ffffff" }}
-                        />
-                      </Grid>
-                    )}
-                  </Grid>
-                ))}
+  <Grid container spacing={2} key={index} sx={{ mb: 2 }} alignItems="center">
+    <Grid item xs={4}>
+      <TextField
+        label="Name"
+        type="text"
+        value={person}
+        onChange={(e) => updatePerson(index, e.target.value)}
+        fullWidth
+        variant="outlined"
+        sx={{ backgroundColor: "#ffffff" }}
+      />
+    </Grid>
+    {splitType === "unequal" && (
+      <Grid item xs={3}>
+        <TextField
+          label="Amount Paid"
+          type="number"
+          value={amounts[index]}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value);
+            if (val >= 0) {
+              updateAmount(index, val);
+            }
+          }}
+          fullWidth
+          variant="outlined"
+          sx={{ backgroundColor: "#ffffff" }}
+        />
+      </Grid>
+    )}
+    {splitType === "percentage" && (
+      <Grid item xs={3}>
+        <TextField
+          label="Percentage (%)"
+          type="number"
+          value={percentages[index]}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value);
+            if (val >= 0 && val <= 100) {
+              updatePercentage(index, val);
+            }
+          }}
+          fullWidth
+          variant="outlined"
+          sx={{ backgroundColor: "#ffffff" }}
+        />
+      </Grid>
+    )}
+    {splitType === "shares" && (
+      <Grid item xs={3}>
+        <TextField
+          label="Shares"
+          type="number"
+          value={shares[index]}
+          onChange={(e) => updateShares(index, e.target.value)}
+          fullWidth
+          variant="outlined"
+          sx={{ backgroundColor: "#ffffff" }}
+        />
+      </Grid>
+    )}
+    <Grid item xs={1}>
+  <Button
+    color="error"
+    onClick={() => deletePerson(index)}
+    sx={{ minWidth: "36px", padding: "6px 10px" }}
+  >
+    <Delete />
+  </Button>
+</Grid>
+  </Grid>
+))}
+
                 <Button
                   variant="contained"
                   color="primary"

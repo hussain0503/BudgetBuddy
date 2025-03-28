@@ -15,6 +15,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ReceiptIcon from "@mui/icons-material/Receipt"; 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"; 
+import CalculateIcon from "@mui/icons-material/Calculate";  // Added for Manual Split
+import GroupsIcon from "@mui/icons-material/Groups";        // Added for Bill Split
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -64,33 +66,22 @@ const Navbar = () => {
         </Typography>
 
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
-
-          <Button
-            component={Link}
-            to="/Home"
-            startIcon={<HomeIcon />}
-            color="inherit"
+          <Button component={Link} to="/Home" startIcon={<HomeIcon />} color="inherit"
             sx={{
               color: "white",
               textTransform: "capitalize",
               fontWeight: 500,
-              fontFamily: "'Roboto', sans-serif",
               "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
             }}
           >
             Home
           </Button>
 
-          <Button
-            component={Link}
-            to="/Expenses"
-            startIcon={<SavingsIcon />}
-            color="inherit"
+          <Button component={Link} to="/Expenses" startIcon={<SavingsIcon />} color="inherit"
             sx={{
               color: "white",
               textTransform: "capitalize",
               fontWeight: 500,
-              fontFamily: "'Roboto', sans-serif",
               "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
             }}
           >
@@ -99,14 +90,13 @@ const Navbar = () => {
 
           <Button
             color="inherit"
-            startIcon={<ReceiptIcon />} 
-            endIcon={<ArrowDropDownIcon />} 
+            startIcon={<ReceiptIcon />}
+            endIcon={<ArrowDropDownIcon />}
             onClick={handleSplitMenuOpen}
             sx={{
               color: "white",
               textTransform: "capitalize",
               fontWeight: 500,
-              fontFamily: "'Roboto', sans-serif",
               "&:hover": {
                 color: "#ffcc00",
                 transform: "scale(1.1)",
@@ -122,58 +112,40 @@ const Navbar = () => {
             onClose={handleSplitMenuClose}
           >
             <MenuItem component={Link} to="/manualsplit" onClick={handleSplitMenuClose}>
-              Manual Split
+              <CalculateIcon sx={{ mr: 1, color: "#1976d2" }} /> Manual Split
             </MenuItem>
             <MenuItem component={Link} to="/billsplit" onClick={handleSplitMenuClose}>
-              Bill Receipt Split
+              <GroupsIcon sx={{ mr: 1, color: "#1976d2" }} /> Bill Receipt Split
             </MenuItem>
           </Menu>
 
-
-          <Button
-            component={Link}
-            to="/chatbot"
-            startIcon={<ChatIcon />}
-            color="inherit"
+          <Button component={Link} to="/chatbot" startIcon={<ChatIcon />} color="inherit"
             sx={{
               color: "white",
               textTransform: "capitalize",
               fontWeight: 500,
-              fontFamily: "'Roboto', sans-serif",
               "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
             }}
           >
             Chatbot
           </Button>
 
-
-          <Button
-            component={Link}
-            to="/aboutus"
-            startIcon={<InfoIcon />}
-            color="inherit"
+          <Button component={Link} to="/aboutus" startIcon={<InfoIcon />} color="inherit"
             sx={{
               color: "white",
               textTransform: "capitalize",
               fontWeight: 500,
-              fontFamily: "'Roboto', sans-serif",
               "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
             }}
           >
             About Us
           </Button>
 
-
-          <Button
-            component={Link}
-            to="/"
-            startIcon={<LogoutIcon />}
-            color="inherit"
+          <Button component={Link} to="/" startIcon={<LogoutIcon />} color="inherit"
             sx={{
               color: "white",
               textTransform: "capitalize",
               fontWeight: 500,
-              fontFamily: "'Roboto', sans-serif",
               "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
             }}
           >
@@ -182,12 +154,7 @@ const Navbar = () => {
         </Box>
 
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
-          <IconButton
-            size="large"
-            edge="end"
-            color="inherit"
-            onClick={handleMenuOpen}
-          >
+          <IconButton size="large" edge="end" color="inherit" onClick={handleMenuOpen}>
             <MenuIcon />
           </IconButton>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
@@ -200,7 +167,13 @@ const Navbar = () => {
             <MenuItem onClick={handleSplitMenuOpen}>
               <ReceiptIcon sx={{ mr: 1 }} /> Split Expenses <ArrowDropDownIcon sx={{ ml: 1 }} />
             </MenuItem>
-            <MenuItem component={Link} to="/reports" onClick={handleMenuClose}>
+            <MenuItem component={Link} to="/manualsplit" onClick={handleMenuClose}>
+              <CalculateIcon sx={{ mr: 1 }} /> Manual Split
+            </MenuItem>
+            <MenuItem component={Link} to="/billsplit" onClick={handleMenuClose}>
+              <GroupsIcon sx={{ mr: 1 }} /> Bill Receipt Split
+            </MenuItem>
+            <MenuItem component={Link} to="/chatbot" onClick={handleMenuClose}>
               <ChatIcon sx={{ mr: 1 }} /> Chatbot
             </MenuItem>
             <MenuItem component={Link} to="/aboutus" onClick={handleMenuClose}>

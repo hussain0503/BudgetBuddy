@@ -15,7 +15,6 @@ import SplitExpenses from "./ManualSplit";
 import SplitBill from "./BillSplit";
 import ForgotPassword from "./ForgotPassword";
 
-
 const App = () => {
   const location = useLocation();
 
