@@ -146,7 +146,23 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
+const transactionRoutes = require("./routes/transactionRoutes");
+app.use("/api/transactions", transactionRoutes);
 
+app.post("/api/transactions", async (req, res) => {
+  const { type, amount, category, description, userId } = req.body;
+  if (!type || !amount || !category || !description || !userId) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  try {
+    const transaction = new transaction({ type, amount, category, description, userId });
+    await transaction.save();
+    res.status(201).json({ message: "Transaction added successfully", transaction });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {

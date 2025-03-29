@@ -16,7 +16,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ReceiptIcon from "@mui/icons-material/Receipt"; 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"; 
 import CalculateIcon from "@mui/icons-material/Calculate";  
-import GroupsIcon from "@mui/icons-material/Groups";        
+import GroupsIcon from "@mui/icons-material/Groups";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp"; 
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -77,7 +78,7 @@ const Navbar = () => {
             Home
           </Button>
 
-          <Button component={Link} to="/Expenses" startIcon={<SavingsIcon />} color="inherit"
+          <Button component={Link} to="/transaction" startIcon={<SavingsIcon />} color="inherit"
             sx={{
               color: "white",
               textTransform: "capitalize",
@@ -85,8 +86,27 @@ const Navbar = () => {
               "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
             }}
           >
-            Expenses
+            Tracker
           </Button>
+
+          <Button
+  component={Link}
+  to="/analytics"
+  startIcon={<TrendingUpIcon className="icon" sx={{ transition: "0.3s" }} />}
+  color="inherit"
+  sx={{
+    color: "white",
+    textTransform: "capitalize",
+    fontWeight: 500,
+    "&:hover": {
+      color: "#ffcc00",
+      transform: "scale(1.1)",
+      transition: "0.3s",
+    }
+  }}
+>
+  Analytics
+</Button>
 
           <Button
             color="inherit"
