@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-    Container, Card, CardContent, Typography, TextField, Button, Grid, Box, FormControl, InputLabel, Select, MenuItem
+    Container, Card, CardContent, Typography, TextField, Button, Box, FormControl, InputLabel, Select, MenuItem
   } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -85,7 +85,7 @@ const TransactionPage = ({ userId }) => {
   const netBalance = totalIncome - totalExpense;
   const balanceColor = netBalance >= 0 ? "#e8f5e9" : "#ffebee";
 
-    const navigate = useNavigate(); // Initialize navigate function
+    const navigate = useNavigate(); 
   
 
   const columns = [
@@ -132,11 +132,10 @@ const TransactionPage = ({ userId }) => {
 
   return (
     <Container maxWidth="lg" sx={{ minHeight: "100vh", py: 5 }}>
-
-      <Grid container spacing={4} justifyContent="center" alignItems="stretch">
-        {/* Net Balance, Income & Expenses */}
-        <Grid item xs={12} md={4}>
+      <Box display="flex" flexDirection={{ xs: "column", md: "row" }} gap={4} justifyContent="center">
+  {/* Net Balance */}
   <motion.div
+    style={{ flex: 1 }}
     initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8, delay: 0.1 }}
@@ -152,10 +151,10 @@ const TransactionPage = ({ userId }) => {
       </CardContent>
     </Card>
   </motion.div>
-</Grid>
 
-<Grid item xs={12} md={4}>
+  {/* Income */}
   <motion.div
+    style={{ flex: 1 }}
     initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8, delay: 0.2 }}
@@ -171,10 +170,10 @@ const TransactionPage = ({ userId }) => {
       </CardContent>
     </Card>
   </motion.div>
-</Grid>
 
-<Grid item xs={12} md={4}>
+  {/* Expenses */}
   <motion.div
+    style={{ flex: 1 }}
     initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8, delay: 0.3 }}
@@ -190,11 +189,12 @@ const TransactionPage = ({ userId }) => {
       </CardContent>
     </Card>
   </motion.div>
-</Grid>
-
-        {/* Forms for Income and Expenses */}
-        <Grid item xs={12} md={6}>
-          <Card sx={{ boxShadow: 3, borderRadius: 2, height: "100%" }}>
+</Box>
+      {/* Forms Section */}
+      <Box display="flex" flexDirection={{ xs: "column", md: "row" }} gap={4} mt={4}>
+        {/* Income Form */}
+        <Box flex={1}>
+          <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
             <CardContent>
               <Typography variant="h6" fontWeight="bold" gutterBottom>
                 Add Income
@@ -206,134 +206,113 @@ const TransactionPage = ({ userId }) => {
                   value={incomeData.category} onChange={(e) => handleChange(e, "income")} />
                 <TextField label="Description" name="description" fullWidth margin="normal"
                   value={incomeData.description} onChange={(e) => handleChange(e, "income")} />
-                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2,fontWeight: "bold" }}>
+                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2, fontWeight: "bold" }}>
                   Add Income
                 </Button>
               </form>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
-        <Grid item xs={12} md={6}>
-          <Card sx={{ boxShadow: 3, borderRadius: 2, height: "100%" }}>
+        {/* Expense Form */}
+        <Box flex={1}>
+          <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
             <CardContent>
               <Typography variant="h6" fontWeight="bold" gutterBottom>
                 Add Expense
               </Typography>
               <form onSubmit={(e) => handleSubmit(e, "expense")}>
-  <TextField 
-    label="Amount" 
-    name="amount" 
-    type="number" 
-    fullWidth 
-    required 
-    margin="normal"
-    value={expenseData.amount} 
-    onChange={(e) => handleChange(e, "expense")} 
-  />
-  <TextField 
-    label="Category" 
-    name="category" 
-    fullWidth 
-    required 
-    margin="normal"
-    value={expenseData.category} 
-    onChange={(e) => handleChange(e, "expense")} 
-  />
-  <TextField 
-    label="Description" 
-    name="description" 
-    fullWidth 
-    margin="normal"
-    value={expenseData.description} 
-    onChange={(e) => handleChange(e, "expense")} 
-  />
-  <Button type="submit" variant="contained" fullWidth sx={{ mt: 2,fontWeight: "bold" }}>
-    Add Expense
-  </Button>
-</form>
-
+                <TextField label="Amount" name="amount" type="number" fullWidth required margin="normal"
+                  value={expenseData.amount} onChange={(e) => handleChange(e, "expense")} />
+                <TextField label="Category" name="category" fullWidth required margin="normal"
+                  value={expenseData.category} onChange={(e) => handleChange(e, "expense")} />
+                <TextField label="Description" name="description" fullWidth margin="normal"
+                  value={expenseData.description} onChange={(e) => handleChange(e, "expense")} />
+                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2, fontWeight: "bold" }}>
+                  Add Expense
+                </Button>
+              </form>
             </CardContent>
           </Card>
-        </Grid>
-        
-
-        {/* Transaction List Card */}
-<Grid item xs={12}>
-  <Card sx={{ boxShadow: 3, borderRadius: 2, p: 2 }}>
-    <CardContent>
-      {/* Search and Filter Row */}
-      <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-        {/* Search Bar */}
-        <TextField
-          label="Search (Category/Description)"
-          variant="outlined"
-          size="small"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          sx={{ width: "60%" }}
-        />
-
-        {/* Filter Dropdown */}
-        <FormControl sx={{ width: "35%" }} size="small">
-          <InputLabel id="filter-label">Filter by Type</InputLabel>
-          <Select
-            labelId="filter-label"
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            label="Filter by Type"
-          >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value="income">Income</MenuItem>
-            <MenuItem value="expense">Expense</MenuItem>
-          </Select>
-        </FormControl>
+        </Box>
       </Box>
 
-      {/* Data Grid */}
-      <DataGrid
-        rows={filteredRows}
-        columns={columns}
-        pageSize={10}
-        autoHeight
-        disableSelectionOnClick
-        sx={{
-          "& .MuiDataGrid-row:nth-of-type(odd)": {
-            backgroundColor: "#1565C0", // Medium-dark blue
-            color: "#ffffff",
-          },
-          "& .MuiDataGrid-row:nth-of-type(even)": {
-            backgroundColor: "#E3F2FD", // Light blue
-            color: "#000000",
-          },
-        }}
-      />
-    </CardContent>
-  </Card>
-</Grid>
-      </Grid>
-       {/* Button to Navigate to Analytics Page */}
-<Box display="flex" justifyContent="center" mt={3}>
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={() => navigate("/analytics")}
-    startIcon={<BarChartIcon />} // Add the icon
-    sx={{
-      fontWeight: "bold",
-      fontSize: "1rem",
-      px: 3,
-      py: 1,
-      transition: "0.3s",
-      "&:hover": {
-        backgroundColor: "#0D47A1",
-        transform: "scale(1.05)", // Slight pop effect
-      },
-    }}
-  >
-    Go to Analytics
-  </Button>
-</Box>
+      {/* Transactions Table */}
+      <Box mt={5}>
+        <Card sx={{ boxShadow: 3, borderRadius: 2, p: 2 }}>
+          <CardContent>
+          <Typography variant="h6" fontWeight="bold" gutterBottom>
+                Income and Expense Table
+              </Typography>
+            {/* Search and Filter */}
+            <Box mb={2} display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
+              <TextField
+                label="Search (Category/Description)"
+                variant="outlined"
+                size="small"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                sx={{ flexBasis: { xs: "100%", sm: "60%" } }}
+              />
+              <FormControl sx={{ flexBasis: { xs: "100%", sm: "35%" } }} size="small">
+                <InputLabel id="filter-label">Filter by Type</InputLabel>
+                <Select
+                  labelId="filter-label"
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                  label="Filter by Type"
+                >
+                  <MenuItem value="all">All</MenuItem>
+                  <MenuItem value="income">Income</MenuItem>
+                  <MenuItem value="expense">Expense</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+
+            {/* Data Table */}
+            <DataGrid
+              rows={filteredRows}
+              columns={columns}
+              pageSize={10}
+              autoHeight
+              disableSelectionOnClick
+              sx={{
+                "& .MuiDataGrid-row:nth-of-type(odd)": {
+                  backgroundColor: "#1565C0",
+                  color: "#ffffff",
+                },
+                "& .MuiDataGrid-row:nth-of-type(even)": {
+                  backgroundColor: "#E3F2FD",
+                  color: "#000000",
+                },
+              }}
+            />
+          </CardContent>
+        </Card>
+      </Box>
+
+      {/* Go to Analytics Button */}
+      <Box display="flex" justifyContent="center" mt={3}>
+        <Button
+          variant="contained"
+          color="primary"
+          href="/analytics"
+          startIcon={<BarChartIcon />}
+          sx={{
+            fontWeight: "bold",
+            fontSize: "1rem",
+            px: 3,
+            py: 1,
+            transition: "0.3s",
+            "&:hover": {
+              backgroundColor: "#0D47A1",
+              transform: "scale(1.05)",
+            },
+          }}
+        >
+          Go to Analytics
+        </Button>
+      </Box>
     </Container>
   );
 };

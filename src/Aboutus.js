@@ -1,8 +1,21 @@
 import React from "react";
-import { Container, CssBaseline, Typography, Box, Grid, Paper, Divider } from "@mui/material";
+import { Container, CssBaseline, Typography, Box, Paper, Divider } from "@mui/material";
 import { motion } from "framer-motion";
 
 function AboutUs() {
+  const sections = [
+    {
+      title: "Our Mission",
+      text: `Our mission at BudgetBuddy is to simplify personal finance management. 
+      We believe that everyone should have the power to manage their money with confidence and ease.`,
+    },
+    {
+      title: "Key Features",
+      text: `BudgetBuddy offers a range of features like expense tracking, real-time budgeting, 
+      savings goals, and detailed analytics to help you stay on top of your finances.`,
+    },
+  ];
+
   return (
     <motion.div 
       initial={{ opacity: 0 }} 
@@ -47,48 +60,37 @@ function AboutUs() {
 
           <Divider sx={{ mb: 4 }} />
 
-          <Grid container spacing={6}>
-            {[
-              {
-                title: "Our Mission",
-                text: `Our mission at BudgetBuddy is to simplify personal finance management. 
-                We believe that everyone should have the power to manage their money with confidence and ease.`,
-              },
-              {
-                title: "Key Features",
-                text: `BudgetBuddy offers a range of features like expense tracking, real-time budgeting, 
-                savings goals, and detailed analytics to help you stay on top of your finances.`,
-              },
-            ].map((section, index) => (
-              <Grid item xs={12} md={6} key={index}>
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }} 
-                  animate={{ opacity: 1, y: 0 }} 
-                  transition={{ duration: 0.8, delay: index * 0.3 }}
+          <Box display="flex" flexWrap="wrap" justifyContent="space-between" gap={4}>
+            {sections.map((section, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.8, delay: index * 0.3 }}
+                style={{ flex: "1 1 45%" }}
+              >
+                <Paper
+                  sx={{
+                    padding: 3,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    boxShadow: 2,
+                    borderRadius: 2,
+                    height: "100%",
+                  }}
                 >
-                  <Paper
-                    sx={{
-                      padding: 3,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      boxShadow: 2,
-                      borderRadius: 2,
-                      height: "100%",
-                    }}
-                  >
-                    <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2, color: "#1976d2" }}>
-                      {section.title}
-                    </Typography>
-                    <Typography variant="body1" sx={{ textAlign: "center" }}>
-                      {section.text}
-                    </Typography>
-                  </Paper>
-                </motion.div>
-              </Grid>
+                  <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2, color: "#1976d2" }}>
+                    {section.title}
+                  </Typography>
+                  <Typography variant="body1" sx={{ textAlign: "center" }}>
+                    {section.text}
+                  </Typography>
+                </Paper>
+              </motion.div>
             ))}
-          </Grid>
+          </Box>
 
           <Divider sx={{ my: 4 }} />
 
@@ -116,35 +118,30 @@ function AboutUs() {
             <Typography variant="h5" sx={{ fontWeight: "bold", mb: 4, textAlign: "center", color: "#1976d2" }}>
               Meet the Creator
             </Typography>
-            <Typography variant="body1" sx={{ mb: 4, textAlign: "center" }}>
-              BudgetBuddy is built by a passionate team of developers, designers, and financial experts who are dedicated
-              to simplifying personal finance.
-            </Typography>
           </motion.div>
 
-          <Grid container justifyContent="center" spacing={4}>
-            <Grid item xs={12} md={6}>
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }} 
-                animate={{ opacity: 1, y: 0 }} 
-                transition={{ duration: 0.8, delay: 1 }}
-              >
-                <Paper sx={{ padding: 3, boxShadow: 2, borderRadius: 2, textAlign: "center" }}>
-                  <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2, color: "#1976d2" }}>
-                    Hussain Mantri
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    Software Engineer
-                  </Typography>
-                  <Typography variant="body1" sx={{ mt: 2 }}>
-                    Hussain is a tech enthusiast with a passion for making finance accessible to all. With a deep
-                    understanding of both technology and financial management, he leads BudgetBuddy with a focus on
-                    simplicity, innovation, and user experience.
-                  </Typography>
-                </Paper>
-              </motion.div>
-            </Grid>
-          </Grid>
+          <Box display="flex" justifyContent="center" mt={4}>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.8, delay: 1 }}
+              style={{ flex: "1 1 100%", maxWidth: "600px" }}
+            >
+              <Paper sx={{ padding: 3, boxShadow: 2, borderRadius: 2, textAlign: "center" }}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2, color: "#1976d2" }}>
+                  Hussain Mantri
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  Software Engineer
+                </Typography>
+                <Typography variant="body1" sx={{ mt: 2 }}>
+                  Hussain is a tech enthusiast with a passion for making finance accessible to all. With a deep
+                  understanding of both technology and financial management, he leads BudgetBuddy with a focus on
+                  simplicity, innovation, and user experience.
+                </Typography>
+              </Paper>
+            </motion.div>
+          </Box>
 
           <Divider sx={{ my: 4 }} />
 

@@ -6,8 +6,6 @@ import {
   Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, 
   Legend, ArcElement, PointElement, LineElement 
 } from "chart.js";
-import Grid from "@mui/material/Grid";
-
 ChartJS.register(
   CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, 
   ArcElement, PointElement, LineElement
@@ -153,133 +151,84 @@ const AnalyticsPage = ({ userId }) => {
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       <Paper
-  elevation={3}
-  sx={{
-    p: 3,
-    textAlign: "center",
-    borderRadius: 4,
-    mb: 4,
-    background: "linear-gradient(135deg, #ffffff, #e3f2fd)",
-    boxShadow: "0px 6px 14px rgba(0, 0, 0, 0.15)",
-    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-  }}
->
-  <Typography variant="h4" fontWeight="bold">
-    Financial Analytics Dashboard
-  </Typography>
-</Paper>
+        elevation={3}
+        sx={{
+          p: 3,
+          textAlign: "center",
+          borderRadius: 4,
+          mb: 4,
+          background: "linear-gradient(135deg, #ffffff, #e3f2fd)",
+          boxShadow: "0px 6px 14px rgba(0, 0, 0, 0.15)",
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        }}
+      >
+        <Typography variant="h4" fontWeight="bold">
+          Financial Analytics Dashboard
+        </Typography>
+      </Paper>
 
-      <Box sx={{ p: 3, borderRadius: 3, boxShadow: 6 }}>
-      <Grid container spacing={4}>
+      <Box display="flex" flexWrap="wrap" justifyContent="space-between" gap={3}>
 
-          <Grid item xs={12} md={4}>
-            <Card sx={{ boxShadow: 2 }}>
-              <CardContent>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Income Breakdown
-                </Typography>
-                <Bar data={incomeBarData} height={200} />
-              </CardContent>
-            </Card>
-          </Grid>
+        {[incomeBarData, expenseBarData, incomeVsExpenseBarData].map((data, i) => (
+          <Card key={i} sx={{ flex: "1 1 30%", minWidth: 300 }}>
+            <CardContent>
+              <Typography variant="h6" fontWeight="bold" gutterBottom>
+                {["Income Breakdown", "Expense Breakdown", "Income vs Expenses"][i]}
+              </Typography>
+              <Bar data={data} height={200} />
+            </CardContent>
+          </Card>
+        ))}
 
-          <Grid item xs={12} md={4}>
-            <Card sx={{ boxShadow: 2 }}>
-              <CardContent>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Expense Breakdown
-                </Typography>
-                <Bar data={expenseBarData} height={200} />
-              </CardContent>
-            </Card>
-          </Grid>
+        {[incomePieData, expensePieData].map((data, i) => (
+          <Card
+            key={i}
+            sx={{
+              flex: "1 1 45%",
+              minWidth: 300,
+              height: 370,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CardContent sx={{ width: "100%", height: "100%" }}>
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                textAlign="center"
+                sx={{ mb: 1 }}
+              >
+                {["Income Distribution", "Expense Distribution"][i]}
+              </Typography>
+              <Pie
+                data={data}
+                options={{ responsive: true, maintainAspectRatio: false }}
+                style={{ height: "180px", width: "180px", margin: "auto" }}
+              />
+            </CardContent>
+          </Card>
+        ))}
 
-          <Grid item xs={12} md={4}>
-            <Card sx={{ boxShadow: 2 }}>
-              <CardContent>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Income vs Expenses
-                </Typography>
-                <Bar data={incomeVsExpenseBarData} height={200} />
-              </CardContent>
-            </Card>
-          </Grid>
+        {[monthlyIncomeData, monthlyExpenseData, incomeVsExpenseData].map((data, i) => (
+          <Card key={i} sx={{ flex: "1 1 30%", minWidth: 300 }}>
+            <CardContent>
+              <Typography variant="h6" fontWeight="bold" gutterBottom>
+                {["Monthly Income Trends", "Monthly Expense Trends", "Income vs Expense Over Time"][i]}
+              </Typography>
+              <Line data={data} height={200} />
+            </CardContent>
+          </Card>
+        ))}
 
-          <Grid item xs={12} md={6}>
-  <Card sx={{ boxShadow: 2, height: "370px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-    <CardContent sx={{ width: "100%", height: "100%" }}> 
-      <Typography variant="h6" fontWeight="bold" textAlign="center" sx={{ mb: 1 }}>
-        Income Distribution
-      </Typography>
-      <Pie 
-        data={incomePieData} 
-        options={{ responsive: true, maintainAspectRatio: false }} 
-        style={{ height: "180px", width: "180px", margin: "auto" }} 
-      />
-    </CardContent>
-  </Card>
-</Grid>
-
-<Grid item xs={12} md={6}>
-  <Card sx={{ boxShadow: 2, height: "370px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-    <CardContent sx={{ width: "100%", height: "100%" }}> 
-      <Typography variant="h6" fontWeight="bold" textAlign="center" sx={{ mb: 1 }}>
-        Expense Distribution
-      </Typography>
-      <Pie 
-        data={expensePieData} 
-        options={{ responsive: true, maintainAspectRatio: false }} 
-        style={{ height: "180px", width: "180px", margin: "auto" }} 
-      />
-    </CardContent>
-  </Card>
-</Grid>
-
-<Grid item xs={12} md={4}>
-  <Card sx={{ boxShadow: 2 }}>
-    <CardContent>
-      <Typography variant="h6" fontWeight="bold" gutterBottom>
-        Monthly Income Trends
-      </Typography>
-      <Line data={monthlyIncomeData} height={200} />
-    </CardContent>
-  </Card>
-</Grid>
-
-<Grid item xs={12} md={4}>
-  <Card sx={{ boxShadow: 2 }}>
-    <CardContent>
-      <Typography variant="h6" fontWeight="bold" gutterBottom>
-        Monthly Expense Trends
-      </Typography>
-      <Line data={monthlyExpenseData} height={200} />
-    </CardContent>
-  </Card>
-</Grid>
-
-<Grid item xs={12} md={4}>
-  <Card sx={{ boxShadow: 2 }}>
-    <CardContent>
-      <Typography variant="h6" fontWeight="bold" gutterBottom>
-        Income vs Expense Over Time
-      </Typography>
-      <Line data={incomeVsExpenseData} height={200} />
-    </CardContent>
-  </Card>
-</Grid>
-
-          <Grid item xs={12}>
-            <Card sx={{ boxShadow: 2 }}>
-              <CardContent>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Cumulative Savings Over Time
-                </Typography>
-                <Line data={lineChartData} height={200} />
-              </CardContent>
-            </Card>
-          </Grid>
-
-        </Grid>
+        <Card sx={{ width: "100%" }}>
+          <CardContent>
+            <Typography variant="h6" fontWeight="bold" gutterBottom>
+              Cumulative Savings Over Time
+            </Typography>
+            <Line data={lineChartData} height={200} />
+          </CardContent>
+        </Card>
       </Box>
     </Container>
   );

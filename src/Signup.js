@@ -8,7 +8,6 @@ import {
   Typography,
   Container,
   CssBaseline,
-  Grid,
   Link,
 } from "@mui/material";
 import axios from "axios";
@@ -74,7 +73,6 @@ function Signup() {
   return (
     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
       <CssBaseline />
-      
 
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -99,55 +97,55 @@ function Signup() {
           <Typography component="p" variant="body2" sx={{ color: "text.secondary", mb: 3 }}>
             Please fill in the form to create your account.
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  placeholder="Enter your username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  placeholder="Enter a strong password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-            </Grid>
+
+          <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }} noValidate>
+            <Box sx={{ mb: 2 }}>
+              <TextField
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                placeholder="Enter your username"
+                value={formData.username}
+                onChange={handleChange}
+                shrink              />
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                shrink              />
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                placeholder="Enter a strong password"
+                value={formData.password}
+                onChange={handleChange}
+                shrink              />
+            </Box>
+
             {error && (
-              <Typography color="error" sx={{ mt: 2, textAlign: "center" }}>
+              <Typography color="error" sx={{ mt: 1, textAlign: "center" }}>
                 {error}
               </Typography>
             )}
+
             <Button
               type="submit"
               fullWidth
@@ -164,13 +162,12 @@ function Signup() {
             >
               {isLoading ? "Signing Up..." : "Sign Up"}
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="/login" variant="body2" sx={{ textDecoration: "none", color: "#1976d2" }}>
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
+
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Link href="/login" variant="body2" sx={{ textDecoration: "none", color: "#1976d2" }}>
+                Already have an account? Sign in
+              </Link>
+            </Box>
           </Box>
         </Box>
       </motion.div>

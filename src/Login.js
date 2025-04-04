@@ -8,9 +8,9 @@ import {
   Typography,
   Container,
   CssBaseline,
-  Grid,
   Link,
 } from "@mui/material";
+import { motion } from "framer-motion"; 
 
 function Login({ setCurrentUser }) {
   const [formData, setFormData] = useState({
@@ -70,6 +70,11 @@ function Login({ setCurrentUser }) {
   
 
   return (
+    <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
       <CssBaseline />
       <Box
@@ -87,42 +92,46 @@ function Login({ setCurrentUser }) {
         <Typography component="h1" variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
           Sign In
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                type="text"
-                placeholder="Enter your username"
-                value={formData.username}
-                onChange={handleChange}
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-          </Grid>
+
+        <Typography component="p" variant="body2" sx={{ color: "text.secondary", mb: 3 }}>
+          Please fill in your credentials to sign in.
+        </Typography>
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }} noValidate>
+          <Box sx={{ mb: 2 }}>
+            <TextField
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              type="text"
+              placeholder="Enter your username"
+              value={formData.username}
+              onChange={handleChange}
+              shrink            />
+          </Box>
+
+          <Box sx={{ mb: 2 }}>
+            <TextField
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              shrink            />
+          </Box>
+
           {error && (
-            <Typography color="error" sx={{ mt: 2, textAlign: "center" }}>
+            <Typography color="error" sx={{ mt: 1, textAlign: "center" }}>
               {error}
             </Typography>
           )}
+
           <Button
             type="submit"
             fullWidth
@@ -139,21 +148,19 @@ function Login({ setCurrentUser }) {
           >
             {loading ? "Signing In..." : "Sign In"}
           </Button>
-          <Grid container justifyContent="space-between">
-            <Grid item>
-              <Link href="/forgotpassword" variant="body2" sx={{ textDecoration: "none", color: "#1976d2" }}>
-                Forgot Password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/" variant="body2" sx={{ textDecoration: "none", color: "#1976d2" }}>
-                Don't have an account? Sign up
-              </Link>
-            </Grid>
-          </Grid>
+
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+            <Link href="/forgotpassword" variant="body2" sx={{ textDecoration: "none", color: "#1976d2" }}>
+              Forgot Password?
+            </Link>
+            <Link href="/" variant="body2" sx={{ textDecoration: "none", color: "#1976d2" }}>
+              Don't have an account? Sign up
+            </Link>
+          </Box>
         </Box>
       </Box>
     </Container>
+    </motion.div>
   );
 }
 

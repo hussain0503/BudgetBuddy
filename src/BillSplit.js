@@ -5,12 +5,8 @@ import {
   Typography,
   Button,
   TextField,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   IconButton,
+  Box
 } from "@mui/material";
 import { AddCircle, Delete } from "@mui/icons-material";
 import Tesseract from "tesseract.js";
@@ -104,125 +100,101 @@ export default function SplitBill() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-    <Grid container justifyContent="center" sx={{ padding: "40px", backgroundColor: "#f0f4f8", minHeight: "100vh" }}>
-      <Grid item xs={12} md={10} lg={8}>
-        <Card sx={{ p: 4, background: "linear-gradient(135deg, #ffffff, #e3f2fd)", boxShadow: "0px 6px 14px rgba(0,0,0,0.15)", borderRadius: 4 }}>
-          <CardContent>
-            <Typography variant="h5" fontWeight="bold" textAlign="center">Split an Expense</Typography>
+      <Box sx={{ display: "flex", justifyContent: "center", p: 5, backgroundColor: "#f0f4f8", minHeight: "100vh" }}>
+        <Box sx={{ width: "100%", maxWidth: "900px" }}>
+          <Card sx={{ p: 4, background: "linear-gradient(135deg, #ffffff, #e3f2fd)", boxShadow: 3, borderRadius: 4 }}>
+            <CardContent>
+              <Typography variant="h5" fontWeight="bold" textAlign="center">Split an Expense</Typography>
 
+              <Button variant="contained" component="label" sx={{ my: 2, fontWeight: "bold" }}>
+                Upload Receipt
+                <input type="file" hidden onChange={handleFileUpload} />
+              </Button>
 
-            <Button variant="contained" component="label"  sx={{ my: 2,fontWeight: "bold", }}>
-              Upload Receipt
-              <input type="file" hidden onChange={handleFileUpload} sx={{fontWeight: "bold" }} />
-            </Button>
+              {receiptText && (
+                <>
+                  <Typography variant="h6" fontWeight="bold">Extracted Receipt Text:</Typography>
+                  <pre style={{ background: "#eef", padding: "10px", borderRadius: "5px" }}>{receiptText}</pre>
+                </>
+              )}
 
-            {receiptText && (
-              <>
-                <Typography variant="h6" fontWeight="bold">Extracted Receipt Text:</Typography>
-                <pre style={{ background: "#eef", padding: "10px", borderRadius: "5px" }}>{receiptText}</pre>
-              </>
-            )}
-
-
-            <Typography variant="h6" fontWeight="bold" sx={{ mt: 3 }}>Participants</Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={8}>
+              <Typography variant="h6" fontWeight="bold" sx={{ mt: 3 }}>Participants</Typography>
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mt: 1 }}>
                 <TextField
                   fullWidth
                   variant="outlined"
                   label="Enter name"
                   value={newPerson}
                   onChange={(e) => setNewPerson(e.target.value)}
+                  sx={{ flex: "1 1 60%" }}
                 />
-              </Grid>
-              <Grid item xs={4}>
-              <Button
-  variant="contained"
-  color="primary"
-  fullWidth
-  startIcon={<AddCircle />}
-  onClick={addPerson}
-  sx={{
-    py: 1.5, 
-    fontSize: "1.1rem",
-    fontWeight: "bold", 
-  }}
->
-  Add
-</Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddCircle />}
+                  onClick={addPerson}
+                  sx={{ flex: "1 1 35%", fontWeight: "bold", fontSize: "1.1rem", py: 1.5 }}
+                >
+                  Add
+                </Button>
+              </Box>
 
-              </Grid>
-            </Grid>
-
-            {people.length > 0 && (
-              <Grid container spacing={2} sx={{ mt: 2 }}>
-                {people.map((person, index) => (
-                  <Grid item key={index} xs={6} sm={4}>
-                    <Card sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 1.5 }}>
+              {people.length > 0 && (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mt: 2 }}>
+                  {people.map((person, index) => (
+                    <Card key={index} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", p: 2, width: "calc(33% - 10px)", minWidth: "200px" }}>
                       <Typography>{person}</Typography>
                       <IconButton color="error" onClick={() => removePerson(person)}>
                         <Delete />
                       </IconButton>
                     </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            )}
+                  ))}
+                </Box>
+              )}
 
+              {lineItems.length > 0 && (
+                <>
+                  <Typography variant="h6" fontWeight="bold" sx={{ mt: 3 }}>Detected Items (Tap to Assign)</Typography>
+                  {lineItems.map((item, index) => (
+                    <Box key={index} sx={{ display: "flex", gap: 2, flexWrap: "wrap", my: 1 }}>
+                      <TextField fullWidth label="Item" value={item.item} disabled sx={{ flex: "1 1 50%" }} />
+                      <TextField fullWidth label="Price" value={item.price || ""} disabled sx={{ flex: "1 1 20%" }} />
+                      <Button
+                        variant="contained"
+                        onClick={() => assignPersonToItem(index)}
+                        sx={{
+                          flex: "1 1 25%",
+                          fontWeight: "bold",
+                          backgroundColor: item.assignedTo ? "primary.main" : "white",
+                          color: item.assignedTo ? "white" : "black",
+                          border: "1px solid",
+                          borderColor: "primary.main",
+                          "&:hover": {
+                            backgroundColor: item.assignedTo ? "primary.dark" : "#f0f0f0",
+                          },
+                        }}
+                      >
+                        {item.assignedTo || "Tap to Assign"}
+                      </Button>
+                    </Box>
+                  ))}
+                </>
+              )}
 
-            {lineItems.length > 0 && (
-              <>
-                <Typography variant="h6" fontWeight="bold" sx={{ mt: 3 }}>Detected Items (Tap to Assign)</Typography>
-                {lineItems.map((item, index) => (
-                 <Grid container spacing={2} key={index} sx={{ my: 1 }}>
-                 <Grid item xs={6}>
-                   <TextField fullWidth variant="outlined" label="Item" value={item.item} disabled />
-                 </Grid>
-                 <Grid item xs={3}>
-                   <TextField fullWidth variant="outlined" label="Price" value={item.price || ""} disabled />
-                 </Grid>
-                 <Grid item xs={3} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                   <Button
-                     variant="contained"
-                     fullWidth
-                     onClick={() => assignPersonToItem(index)}
-                     sx={{
-                       height: "100%",
-                       textTransform: "none",
-                       fontWeight: "bold",
-                       backgroundColor: item.assignedTo ? "primary.main" : "white",
-                       color: item.assignedTo ? "white" : "black",
-                       border: "1px solid",
-                       borderColor: "primary.main",
-                       "&:hover": {
-                         backgroundColor: item.assignedTo ? "primary.dark" : "#f0f0f0",
-                       },
-                     }}
-                   >
-                     {item.assignedTo || "Tap to Assign"}
-                   </Button>
-                 </Grid>
-               </Grid>               
-                ))}
-              </>
-            )}
-
-
-{Object.keys(owedAmounts).length > 0 && (
-  <>
-    <Typography variant="h6" sx={{ mt: 3, fontWeight: "bold" }}>Amount Split</Typography>
-    {Object.entries(owedAmounts).map(([person, amount]) => (
-      <Typography key={person} variant="body1" sx={{ fontWeight: "bold" }}>
-        {person}: <span style={{ color: "red" }}>${amount.toFixed(2)}</span>
-      </Typography>
-    ))}
-  </>
-)}
-
-          </CardContent>
-        </Card>
-      </Grid>
-    </Grid>
+              {Object.keys(owedAmounts).length > 0 && (
+                <>
+                  <Typography variant="h6" sx={{ mt: 3, fontWeight: "bold" }}>Amount Split</Typography>
+                  {Object.entries(owedAmounts).map(([person, amount]) => (
+                    <Typography key={person} variant="body1" sx={{ fontWeight: "bold" }}>
+                      {person}: <span style={{ color: "red" }}>${amount.toFixed(2)}</span>
+                    </Typography>
+                  ))}
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </Box>
+      </Box>
     </motion.div>
   );
 }

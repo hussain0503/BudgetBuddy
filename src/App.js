@@ -20,7 +20,7 @@ import AnalyticsPage from "./AnalyticsPage";
 
 const App = () => {
   const location = useLocation();
-  
+
   const [currentUser, setCurrentUser] = useState(() => {
     return JSON.parse(localStorage.getItem("currentUser")) || null;
   });
@@ -36,9 +36,14 @@ const App = () => {
   const hideNavbarRoutes = ["/login", "/", "/forgotpassword"];
   const hideFooterRoutes = ["/login", "/", "/forgotpassword"];
 
+  const isResetPasswordRoute = location.pathname.toLowerCase().startsWith("/resetpassword");
+
+  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname.toLowerCase()) || isResetPasswordRoute;
+  const shouldHideFooter = hideFooterRoutes.includes(location.pathname.toLowerCase()) || isResetPasswordRoute;
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      {!hideNavbarRoutes.includes(location.pathname.toLowerCase()) && <Navbar />}
+      {!shouldHideNavbar && <Navbar />}
 
       <Box sx={{ flex: 1 }}>
         <Routes>
@@ -54,12 +59,30 @@ const App = () => {
           <Route path="/ManualSplit" element={<SplitExpenses />} />
           <Route path="/BillSplit" element={<SplitBill />} />
           <Route path="/resetpassword/:token" element={<Resetpassword />} />
-          <Route path="/transaction" element={currentUser ? <TransactionPage userId={currentUser._id} /> : <Login setCurrentUser={setCurrentUser} />}/>
-          <Route path="/analytics" element={currentUser ? <AnalyticsPage userId={currentUser._id} /> : <Login setCurrentUser={setCurrentUser} />} />
-          </Routes>
+          <Route
+            path="/transaction"
+            element={
+              currentUser ? (
+                <TransactionPage userId={currentUser._id} />
+              ) : (
+                <Login setCurrentUser={setCurrentUser} />
+              )
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              currentUser ? (
+                <AnalyticsPage userId={currentUser._id} />
+              ) : (
+                <Login setCurrentUser={setCurrentUser} />
+              )
+            }
+          />
+        </Routes>
       </Box>
 
-      {!hideFooterRoutes.includes(location.pathname.toLowerCase()) && <Footer />}
+      {!shouldHideFooter && <Footer />}
     </Box>
   );
 };

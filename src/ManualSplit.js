@@ -5,7 +5,7 @@ import {
   Typography,
   Button,
   TextField,
-  Grid,
+  Box,
   Container,
   MenuItem,
   Select,
@@ -143,21 +143,21 @@ export default function SplitExpenses() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={12} md={10} lg={8}>
+        <Box display="flex" justifyContent="center">
+          <Box width="100%" maxWidth="900px">
             <Card
               sx={{
                 background: "linear-gradient(135deg, #ffffff, #e3f2fd)",
                 boxShadow: "0px 6px 14px rgba(0, 0, 0, 0.15)",
                 borderRadius: 4,
                 p: 4,
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
               }}
             >
               <CardContent>
                 <Typography variant="h5" gutterBottom fontWeight="bold" textAlign="center">
                   Split an Expense
                 </Typography>
+
                 <TextField
                   label="Expense Amount"
                   type="number"
@@ -167,6 +167,7 @@ export default function SplitExpenses() {
                   variant="outlined"
                   sx={{ mb: 3, backgroundColor: "#ffffff" }}
                 />
+
                 <FormControl fullWidth sx={{ mb: 3, mt: 1.5 }}>
                   <InputLabel id="split-type-label">Split Type</InputLabel>
                   <Select
@@ -187,79 +188,73 @@ export default function SplitExpenses() {
                 <Typography variant="h6" gutterBottom fontWeight="bold">
                   Participants
                 </Typography>
+
                 {people.map((person, index) => (
-  <Grid container spacing={2} key={index} sx={{ mb: 2 }} alignItems="center">
-    <Grid item xs={4}>
-      <TextField
-        label="Name"
-        type="text"
-        value={person}
-        onChange={(e) => updatePerson(index, e.target.value)}
-        fullWidth
-        variant="outlined"
-        sx={{ backgroundColor: "#ffffff" }}
-      />
-    </Grid>
-    {splitType === "unequal" && (
-      <Grid item xs={3}>
-        <TextField
-          label="Amount Paid"
-          type="number"
-          value={amounts[index]}
-          onChange={(e) => {
-            const val = parseFloat(e.target.value);
-            if (val >= 0) {
-              updateAmount(index, val);
-            }
-          }}
-          fullWidth
-          variant="outlined"
-          sx={{ backgroundColor: "#ffffff" }}
-        />
-      </Grid>
-    )}
-    {splitType === "percentage" && (
-      <Grid item xs={3}>
-        <TextField
-          label="Percentage (%)"
-          type="number"
-          value={percentages[index]}
-          onChange={(e) => {
-            const val = parseFloat(e.target.value);
-            if (val >= 0 && val <= 100) {
-              updatePercentage(index, val);
-            }
-          }}
-          fullWidth
-          variant="outlined"
-          sx={{ backgroundColor: "#ffffff" }}
-        />
-      </Grid>
-    )}
-    {splitType === "shares" && (
-      <Grid item xs={3}>
-        <TextField
-          label="Shares"
-          type="number"
-          value={shares[index]}
-          onChange={(e) => updateShares(index, e.target.value)}
-          fullWidth
-          variant="outlined"
-          sx={{ backgroundColor: "#ffffff" }}
-        />
-      </Grid>
-    )}
-    <Grid item xs={1}>
-  <Button
-    color="error"
-    onClick={() => deletePerson(index)}
-    sx={{ minWidth: "36px", padding: "6px 10px" }}
-  >
-    <Delete />
-  </Button>
-</Grid>
-  </Grid>
-))}
+                  <Box
+                    key={index}
+                    display="flex"
+                    gap={2}
+                    flexWrap="wrap"
+                    alignItems="center"
+                    mb={2}
+                  >
+                    <TextField
+                      label="Name"
+                      type="text"
+                      value={person}
+                      onChange={(e) => updatePerson(index, e.target.value)}
+                      variant="outlined"
+                      sx={{ backgroundColor: "#ffffff", width: "400px" }} // changed from flex: 1
+                      />
+                    {splitType === "unequal" && (
+                      <TextField
+                        label="Amount Paid"
+                        type="number"
+                        value={amounts[index]}
+                        onChange={(e) => {
+                          const val = parseFloat(e.target.value);
+                          if (val >= 0) {
+                            updateAmount(index, val);
+                          }
+                        }}
+                        variant="outlined"
+                        sx={{ backgroundColor: "#ffffff", width: "160px" }}
+                      />
+                    )}
+                    {splitType === "percentage" && (
+                      <TextField
+                        label="Percentage (%)"
+                        type="number"
+                        value={percentages[index]}
+                        onChange={(e) => {
+                          const val = parseFloat(e.target.value);
+                          if (val >= 0 && val <= 100) {
+                            updatePercentage(index, val);
+                          }
+                        }}
+                        variant="outlined"
+                        sx={{ backgroundColor: "#ffffff", width: "160px" }}
+                      />
+                    )}
+                    {splitType === "shares" && (
+                      <TextField
+                        label="Shares"
+                        type="number"
+                        value={shares[index]}
+                        onChange={(e) => updateShares(index, e.target.value)}
+                        variant="outlined"
+                        sx={{ backgroundColor: "#ffffff", width: "160px" }}
+                      />
+                    )}
+                    <Button
+                      color="error"
+                      onClick={() => deletePerson(index)}
+                      sx={{ minWidth: "36px", padding: "6px 10px" }}
+                    >
+                      <Delete />
+                    </Button>
+                  </Box>
+                ))}
 
                 <Button
                   variant="contained"
@@ -278,21 +273,24 @@ export default function SplitExpenses() {
                 >
                   + Add Person
                 </Button>
-                <div style={{ marginTop: "20px" }}>
+
+                <Box mt={4}>
                   <Typography variant="h6" fontWeight="bold">
                     Split Results
                   </Typography>
                   {calculateSplit().map((result, index) => (
                     <Typography key={index} sx={{ mt: 1, fontSize: "1rem", color: "#333" }}>
                       {result.person || "Someone"} owes:{" "}
-                      <span style={{ fontWeight: "bold", color: "#f44336" }}>${result.amountOwed.toFixed(2)}</span>
+                      <span style={{ fontWeight: "bold", color: "#f44336" }}>
+                        ${result.amountOwed.toFixed(2)}
+                      </span>
                     </Typography>
                   ))}
-                </div>
+                </Box>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </motion.div>
     </Container>
   );

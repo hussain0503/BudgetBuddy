@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+} from "@mui/material";
+import { motion } from "framer-motion";
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -15,7 +23,6 @@ const ResetPassword = () => {
     setMessage("");
     setError("");
 
-    // Check if passwords match
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -27,8 +34,6 @@ const ResetPassword = () => {
         newPassword,
       });
       setMessage(response.data.message);
-      
-      // Redirect to login after success
       setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
       setError(error.response?.data?.message || "Something went wrong");
@@ -36,35 +41,89 @@ const ResetPassword = () => {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
-      <h2>Reset Password</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="password"
-          placeholder="Enter new password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-        />
-        <input
-          type="password"
-          placeholder="Confirm new password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-        />
-        <button
-          type="submit"
-          style={{ width: "100%", padding: "10px", background: "green", color: "white" }}
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      px={2}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        style={{ width: "100%", maxWidth: 540 }} 
+      >
+        <Paper
+          elevation={4}
+          sx={{
+            p: 4, 
+            borderRadius: 4,
+            textAlign: "center",
+            bgcolor: "white",
+          }}
         >
-          Reset Password
-        </button>
-      </form>
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
-      {message && <p style={{ color: "green", marginTop: "10px" }}>{message}</p>}
-    </div>
+          <Typography variant="h4" fontWeight="bold" gutterBottom>
+            Reset Password
+          </Typography>
+
+          <Typography variant="body2" color="textSecondary" mb={3}>
+            Enter your new password and confirm it below.
+          </Typography>
+
+          <form onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              type="password"
+              label="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              margin="normal"
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              fullWidth
+              type="password"
+              label="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              margin="normal"
+              sx={{ mb: 3 }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                backgroundColor: "#1976d2",
+                color: "white",
+                py: 1.3,
+                fontWeight: "bold",
+                fontSize: "16px",
+                ":hover": {
+                  backgroundColor: "#1565c0",
+                },
+              }}
+            >
+              Reset Password
+            </Button>
+          </form>
+
+          {error && (
+            <Typography variant="body2" color="error" mt={3}>
+              {error}
+            </Typography>
+          )}
+          {message && (
+            <Typography variant="body2" color="green" mt={3}>
+              {message}
+            </Typography>
+          )}
+        </Paper>
+      </motion.div>
+    </Box>
   );
 };
 
