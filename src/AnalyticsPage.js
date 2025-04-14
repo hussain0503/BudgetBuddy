@@ -182,32 +182,67 @@ const AnalyticsPage = ({ userId }) => {
 
         {[incomePieData, expensePieData].map((data, i) => (
           <Card
-            key={i}
+          key={i}
+          sx={{
+            flex: "1 1 45%",
+            minWidth: 300,
+            height: 380,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CardContent
             sx={{
-              flex: "1 1 45%",
-              minWidth: 300,
-              height: 370,
+              width: "100%",
+              height: "100%",
               display: "flex",
-              justifyContent: "center",
+              flexDirection: "column",
               alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
             }}
           >
-            <CardContent sx={{ width: "100%", height: "100%" }}>
-              <Typography
-                variant="h6"
-                fontWeight="bold"
-                textAlign="center"
-                sx={{ mb: 1 }}
-              >
-                {["Income Distribution", "Expense Distribution"][i]}
-              </Typography>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              textAlign="center"
+              sx={{ mb: 1 }}
+            >
+              {["Income Distribution", "Expense Distribution"][i]}
+            </Typography>
+            <Box
+              sx={{
+                width: 200,
+                height: 200,
+                position: "relative",
+              }}
+            >
               <Pie
                 data={data}
-                options={{ responsive: true, maintainAspectRatio: false }}
-                style={{ height: "180px", width: "180px", margin: "auto" }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: "bottom",
+                      labels: {
+                        boxWidth: 12,
+                        padding: 10,
+                      },
+                    },
+                  },
+                  layout: {
+                    padding: {
+                      bottom: 30,
+                    },
+                  },
+                }}
               />
-            </CardContent>
-          </Card>
+            </Box>
+          </CardContent>
+        </Card>
+        
         ))}
 
         {[monthlyIncomeData, monthlyExpenseData, incomeVsExpenseData].map((data, i) => (
@@ -221,14 +256,35 @@ const AnalyticsPage = ({ userId }) => {
           </Card>
         ))}
 
-        <Card sx={{ width: "100%" }}>
-          <CardContent>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Cumulative Savings Over Time
-            </Typography>
-            <Line data={lineChartData} height={200} />
-          </CardContent>
-        </Card>
+<Card sx={{ width: "100%", height: 380 }}>
+  <CardContent>
+    <Typography variant="h6" fontWeight="bold" gutterBottom>
+      Cumulative Savings Over Time
+    </Typography>
+    <Box sx={{ height: 300 }}>
+      <Line
+        data={lineChartData}
+        options={{
+          maintainAspectRatio: false,
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+          },
+          scales: {
+            x: {
+              ticks: {
+                maxRotation: 45,
+                minRotation: 45,
+              },
+            },
+          },
+        }}
+      />
+    </Box>
+  </CardContent>
+</Card>
+
+
       </Box>
     </Container>
   );

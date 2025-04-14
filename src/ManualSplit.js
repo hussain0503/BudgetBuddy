@@ -16,8 +16,6 @@ import {
 import { motion } from "framer-motion";
 import { Delete } from "@mui/icons-material";
 
-
-
 export default function SplitExpenses() {
   const [expense, setExpense] = useState("");
   const [people, setPeople] = useState([""]);
@@ -32,7 +30,7 @@ export default function SplitExpenses() {
     setAmounts([...amounts, ""]);
     setPercentages([...percentages, ""]);
     setShares([...shares, ""]);
-    setError(""); // Clear error when adding a person
+    setError("");
   };
 
   const updatePerson = (index, value) => {
@@ -47,37 +45,40 @@ export default function SplitExpenses() {
       setAmounts(amounts.filter((_, i) => i !== index));
       setPercentages(percentages.filter((_, i) => i !== index));
       setShares(shares.filter((_, i) => i !== index));
-      setError(""); // Clear any errors when deleting
+      setError("");
     } else {
       setError("At least one participant is required.");
     }
   };
-  
+
   const updateAmount = (index, value) => {
     const newAmounts = [...amounts];
-    const parsedValue = parseFloat(value) || 0;
-  
-    // Ensure the new value does not cause the total to exceed the expense amount
-    const totalOtherAmounts = newAmounts.reduce(
-      (sum, amount, i) => (i === index ? sum : sum + parseFloat(amount || 0)),
-      0
-    );
-  
-    if (totalOtherAmounts + parsedValue > expense) {
+    const cleanedValue = value === "" ? "" : value;
+    newAmounts[index] = cleanedValue;
+
+    const totalOtherAmounts = newAmounts.reduce((sum, amount, i) => {
+      const num = parseFloat(amount);
+      return sum + (isNaN(num) || i === index ? 0 : num);
+    }, 0);
+
+    const newValueNum = parseFloat(cleanedValue);
+    if (!isNaN(newValueNum) && totalOtherAmounts + newValueNum > parseFloat(expense)) {
       setError("Total amounts cannot exceed the expense amount.");
     } else {
       setError("");
-      newAmounts[index] = parsedValue;
       setAmounts(newAmounts);
     }
   };
-  
+
   const updatePercentage = (index, value) => {
     const newPercentages = [...percentages];
     newPercentages[index] = value;
-  
-    const totalPercentage = newPercentages.reduce((sum, percentage) => sum + parseFloat(percentage || 0), 0);
-    
+
+    const totalPercentage = newPercentages.reduce(
+      (sum, percentage) => sum + parseFloat(percentage || 0),
+      0
+    );
+
     if (totalPercentage > 100) {
       setError("Total percentages cannot exceed 100%.");
     } else {
@@ -85,29 +86,11 @@ export default function SplitExpenses() {
       setPercentages(newPercentages);
     }
   };
-  
+
   const updateShares = (index, value) => {
     const newShares = [...shares];
     newShares[index] = value;
     setShares(newShares);
-  };
-
-  const validatePercentageSplit = (newPercentages) => {
-    const totalPercentage = newPercentages.reduce((sum, percentage) => sum + parseFloat(percentage || 0), 0);
-    if (totalPercentage > 100) {
-      setError("Total percentages cannot exceed 100%.");
-    } else {
-      setError("");
-    }
-  };
-
-  const validateUnequalSplit = (newAmounts) => {
-    const totalAmount = newAmounts.reduce((sum, amount) => sum + parseFloat(amount || 0), 0);
-    if (totalAmount > expense) {
-      setError("Total amounts cannot exceed the expense amount.");
-    } else {
-      setError("");
-    }
   };
 
   const calculateSplit = () => {
@@ -123,7 +106,10 @@ export default function SplitExpenses() {
         amountOwed: (percentages[index] / 100) * expense || 0,
       }));
     } else if (splitType === "shares") {
-      const totalShares = shares.reduce((sum, share) => sum + parseInt(share || 0, 10), 0);
+      const totalShares = shares.reduce(
+        (sum, share) => sum + parseInt(share || 0, 10),
+        0
+      );
       return people.map((person, index) => ({
         person,
         amountOwed: (shares[index] / totalShares) * expense || 0,
@@ -190,30 +176,23 @@ export default function SplitExpenses() {
                 </Typography>
 
                 {people.map((person, index) => (
-                  <Box
-                    key={index}
-                    display="flex"
-                    gap={2}
-                    flexWrap="wrap"
-                    alignItems="center"
-                    mb={2}
-                  >
+                  <Box key={index} display="flex" gap={2} flexWrap="wrap" alignItems="center" mb={2}>
                     <TextField
                       label="Name"
                       type="text"
                       value={person}
                       onChange={(e) => updatePerson(index, e.target.value)}
                       variant="outlined"
-                      sx={{ backgroundColor: "#ffffff", width: "400px" }} // changed from flex: 1
-                      />
+                      sx={{ backgroundColor: "#ffffff", width: "400px" }}
+                    />
                     {splitType === "unequal" && (
                       <TextField
                         label="Amount Paid"
-                        type="number"
+                        type="text"
                         value={amounts[index]}
                         onChange={(e) => {
-                          const val = parseFloat(e.target.value);
-                          if (val >= 0) {
+                          const val = e.target.value;
+                          if (/^\d*(\.\d{0,2})?$/.test(val)) {
                             updateAmount(index, val);
                           }
                         }}
@@ -224,11 +203,11 @@ export default function SplitExpenses() {
                     {splitType === "percentage" && (
                       <TextField
                         label="Percentage (%)"
-                        type="number"
+                        type="text"
                         value={percentages[index]}
                         onChange={(e) => {
-                          const val = parseFloat(e.target.value);
-                          if (val >= 0 && val <= 100) {
+                          const val = e.target.value;
+                          if (/^\d*(\.\d{0,2})?$/.test(val)) {
                             updatePercentage(index, val);
                           }
                         }}
@@ -238,13 +217,19 @@ export default function SplitExpenses() {
                     )}
                     {splitType === "shares" && (
                       <TextField
-                        label="Shares"
-                        type="number"
-                        value={shares[index]}
-                        onChange={(e) => updateShares(index, e.target.value)}
-                        variant="outlined"
-                        sx={{ backgroundColor: "#ffffff", width: "160px" }}
-                      />
+                      label="Shares"
+                      type="text"
+                      value={shares[index]}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^\d*$/.test(val)) {
+                          updateShares(index, val);
+                        }
+                      }}
+                      variant="outlined"
+                      sx={{ backgroundColor: "#ffffff", width: "160px" }}
+                    />
+                    
                     )}
                     <Button
                       color="error"
@@ -280,8 +265,7 @@ export default function SplitExpenses() {
                   </Typography>
                   {calculateSplit().map((result, index) => (
                     <Typography key={index} sx={{ mt: 1, fontSize: "1rem", color: "#333" }}>
-                      {result.person || "Someone"} owes:{" "}
-                      <span style={{ fontWeight: "bold", color: "#f44336" }}>
+                      {result.person || "Someone"} owes: <span style={{ fontWeight: "bold", color: "#f44336" }}>
                         ${result.amountOwed.toFixed(2)}
                       </span>
                     </Typography>

@@ -18,7 +18,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CalculateIcon from "@mui/icons-material/Calculate";  
 import GroupsIcon from "@mui/icons-material/Groups";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"; 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // ✅ Updated to include useNavigate
+
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -38,6 +39,16 @@ const Navbar = () => {
 
   const handleSplitMenuClose = () => {
     setSplitMenuAnchor(null);
+  };
+
+  const navigate = useNavigate(); 
+
+
+  const handleLogout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+
+    navigate("/");
   };
 
   return (
@@ -161,16 +172,20 @@ const Navbar = () => {
             About Us
           </Button>
 
-          <Button component={Link} to="/" startIcon={<LogoutIcon />} color="inherit"
-            sx={{
-              color: "white",
-              textTransform: "capitalize",
-              fontWeight: 500,
-              "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
-            }}
-          >
-            Logout
-          </Button>
+          <Button
+  startIcon={<LogoutIcon />}
+  color="inherit"
+  onClick={handleLogout}
+  sx={{
+    color: "white",
+    textTransform: "capitalize",
+    fontWeight: 500,
+    "&:hover": { color: "#ffcc00", transform: "scale(1.1)", transition: "0.3s" },
+  }}
+>
+  Logout
+</Button>
+
         </Box>
 
         <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -199,9 +214,10 @@ const Navbar = () => {
             <MenuItem component={Link} to="/aboutus" onClick={handleMenuClose}>
               <InfoIcon sx={{ mr: 1 }} /> About Us
             </MenuItem>
-            <MenuItem component={Link} to="/" onClick={handleMenuClose}>
-              <LogoutIcon sx={{ mr: 1 }} /> Logout
-            </MenuItem>
+            <MenuItem onClick={() => { handleMenuClose(); handleLogout(); }}>
+  <LogoutIcon sx={{ mr: 1 }} /> Logout
+</MenuItem>
+
           </Menu>
         </Box>
       </Toolbar>
