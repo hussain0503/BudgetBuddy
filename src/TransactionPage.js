@@ -133,7 +133,7 @@ const TransactionPage = ({ userId }) => {
   return (
     <Container maxWidth="lg" sx={{ minHeight: "100vh", py: 5 }}>
       <Box display="flex" flexDirection={{ xs: "column", md: "row" }} gap={4} justifyContent="center">
-  {/* Net Balance */}
+  
   <motion.div
     style={{ flex: 1 }}
     initial={{ opacity: 0, y: 30 }}
@@ -152,7 +152,7 @@ const TransactionPage = ({ userId }) => {
     </Card>
   </motion.div>
 
-  {/* Income */}
+  
   <motion.div
     style={{ flex: 1 }}
     initial={{ opacity: 0, y: 30 }}
@@ -171,7 +171,7 @@ const TransactionPage = ({ userId }) => {
     </Card>
   </motion.div>
 
-  {/* Expenses */}
+  
   <motion.div
     style={{ flex: 1 }}
     initial={{ opacity: 0, y: 30 }}
@@ -190,9 +190,9 @@ const TransactionPage = ({ userId }) => {
     </Card>
   </motion.div>
 </Box>
-      {/* Forms Section */}
+      
       <Box display="flex" flexDirection={{ xs: "column", md: "row" }} gap={4} mt={4}>
-        {/* Income Form */}
+        
         <Box flex={1}>
           <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
             <CardContent>
@@ -214,7 +214,7 @@ const TransactionPage = ({ userId }) => {
           </Card>
         </Box>
 
-        {/* Expense Form */}
+        
         <Box flex={1}>
           <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
             <CardContent>
@@ -237,14 +237,14 @@ const TransactionPage = ({ userId }) => {
         </Box>
       </Box>
 
-      {/* Transactions Table */}
+      
       <Box mt={5}>
         <Card sx={{ boxShadow: 3, borderRadius: 2, p: 2 }}>
           <CardContent>
           <Typography variant="h6" fontWeight="bold" gutterBottom>
                 Income and Expense Table
               </Typography>
-            {/* Search and Filter */}
+            
             <Box mb={2} display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
               <TextField
                 label="Search (Category/Description)"
@@ -269,7 +269,7 @@ const TransactionPage = ({ userId }) => {
               </FormControl>
             </Box>
 
-            {/* Data Table */}
+            
             <DataGrid
               rows={filteredRows}
               columns={columns}
@@ -291,7 +291,7 @@ const TransactionPage = ({ userId }) => {
         </Card>
       </Box>
 
-      {/* Go to Analytics Button */}
+      
       <Box display="flex" justifyContent="center" mt={3}>
         <Button
           variant="contained"

@@ -51,9 +51,9 @@ function Login({ setCurrentUser }) {
       });
   
       if (response.data.user) {
-        const userData = response.data.user; // Extract user object
-        localStorage.setItem("currentUser", JSON.stringify(userData)); // Store in localStorage
-        setCurrentUser(userData); // Update state in App.js
+        const userData = response.data.user; 
+        localStorage.setItem("currentUser", JSON.stringify(userData)); 
+        setCurrentUser(userData); 
   
         console.log("Login successful:", userData);
         navigate("/Home");

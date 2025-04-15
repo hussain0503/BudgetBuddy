@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-// Nodemailer setup
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -35,7 +35,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Request password reset
+
 app.post("/api/auth/request-reset", async (req, res) => {
   const { email } = req.body;
   
@@ -45,16 +45,16 @@ app.post("/api/auth/request-reset", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found." });
 
-    // Generate reset token
+    
     const resetToken = crypto.randomBytes(32).toString("hex");
     user.resetToken = resetToken;
-    user.resetTokenExpiry = Date.now() + 3600000; // 1 hour expiry
+    user.resetTokenExpiry = Date.now() + 3600000; 
     await user.save();
 
-    // Reset link
+    
     const resetLink = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
 
-    // Send email
+    
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: user.email,
@@ -69,7 +69,7 @@ app.post("/api/auth/request-reset", async (req, res) => {
   }
 });
 
-// Reset password
+
 app.post("/api/auth/resetpassword", async (req, res) => {
   const { token, newPassword } = req.body;
 
@@ -83,7 +83,7 @@ app.post("/api/auth/resetpassword", async (req, res) => {
 
     if (!user) return res.status(400).json({ message: "Invalid or expired token." });
 
-    // Update password
+    
     user.password = newPassword;
     user.resetToken = null;
     user.resetTokenExpiry = null;

@@ -18,7 +18,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CalculateIcon from "@mui/icons-material/Calculate";  
 import GroupsIcon from "@mui/icons-material/Groups";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"; 
-import { Link, useNavigate } from "react-router-dom"; // ✅ Updated to include useNavigate
+import { Link, useNavigate } from "react-router-dom"; 
 
 
 const Navbar = () => {

@@ -24,10 +24,10 @@ function Home() {
         display: 'flex', 
         flexDirection: 'column',
         overflowX: 'hidden',
-        overflowY: 'clip'  // ✅ Prevents vertical scrollbar flash
+        overflowY: 'clip'  
       }}
     >
-      {/* Header Section */}
+      
       <Box
         sx={{
           flexShrink: 0,
@@ -65,7 +65,7 @@ function Home() {
         </motion.div>
       </Box>
 
-      {/* How it Works Section */}
+      
       <motion.div 
         initial={{ opacity: 0, y: 30 }} 
         animate={{ opacity: 1, y: 0 }} 
@@ -121,7 +121,7 @@ function Home() {
         </Box>
       </motion.div>
 
-      {/* Start Managing Section */}
+      
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -161,7 +161,7 @@ function Home() {
         </Button>
       </motion.section>
 
-      {/* About Us Section */}
+      
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
